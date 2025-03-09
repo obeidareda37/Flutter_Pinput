@@ -68,11 +68,23 @@ class _PinItem extends StatelessWidget {
       if (state.widget.obscureText && state.widget.obscuringWidget != null) {
         return SizedBox(key: key, child: state.widget.obscuringWidget);
       }
-
-      return Text(
-        state.widget.obscureText ? state.widget.obscuringCharacter : pin[index],
-        key: key,
-        style: pinTheme.textStyle,
+      return Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.bottomCenter,
+        children: [
+          Text(
+            state.widget.obscureText ? state.widget.obscuringCharacter : pin[index],
+            key: key,
+            style: pinTheme.textStyle,
+          ),
+          if (state.widget.showCompleteCursor)
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: _buildCursor(pinTheme,isCompleted: true),
+              ),
+            ),
+        ],
       );
     }
 
@@ -81,9 +93,16 @@ class _PinItem extends StatelessWidget {
         state.effectiveFocusNode.hasFocus || !state.widget.useNativeKeyboard;
     final shouldShowCursor =
         state.widget.showCursor && state.isEnabled && isActiveField && focused;
+    final shouldShowCompleteCursor = state.widget.showCompleteCursor &&
+        state.isEnabled &&
+        isSubmittedPin;
 
     if (shouldShowCursor) {
       return _buildCursor(pinTheme);
+    }
+
+    if (shouldShowCompleteCursor) {
+      return _buildCursor(pinTheme,isCompleted: true);
     }
 
     if (state.widget.preFilledWidget != null) {
@@ -93,19 +112,35 @@ class _PinItem extends StatelessWidget {
     return Text('', key: key, style: pinTheme.textStyle);
   }
 
-  Widget _buildCursor(PinTheme pinTheme) {
+  Widget _buildCursor(PinTheme pinTheme, {bool isCompleted = false}) {
     if (state.widget.isCursorAnimationEnabled) {
       return _PinputAnimatedCursor(
         textStyle: pinTheme.textStyle,
-        cursor: state.widget.cursor,
+        cursor: isCompleted ? state.widget.completeCursor : state.widget.cursor,
+        isCompleted: isCompleted,
       );
     }
 
     return _PinputCursor(
       textStyle: pinTheme.textStyle,
-      cursor: state.widget.cursor,
+      cursor: isCompleted ? state.widget.completeCursor : state.widget.cursor,
+      isCompleted: isCompleted,
     );
   }
+
+  // Widget _buildCompleteCursor(PinTheme pinTheme) {
+  //   if (state.widget.isCursorAnimationEnabled) {
+  //     return _PinputAnimatedCompleteCursor(
+  //       textStyle: pinTheme.textStyle,
+  //       completeCursor: state.widget.completeCursor,
+  //     );
+  //   }
+  //
+  //   return _PinputCompleteCursor(
+  //     textStyle: pinTheme.textStyle,
+  //     completeCursor: state.widget.completeCursor,
+  //   );
+  // }
 
   Widget _getTransition(Widget child, Animation<double> animation) {
     if (child is _PinputAnimatedCursor) {

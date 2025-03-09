@@ -38,7 +38,9 @@ part 'widgets/_pinput_selection_gesture_detector_builder.dart';
 /// - SMS Autofill on Android
 /// - Standard Cursor
 /// - Custom Cursor
+/// - Custom CompleteCursor
 /// - Cursor Animation
+/// - CompleteCursor Animation
 /// - Copy From Clipboard
 /// - Ready For Custom Keyboard
 /// - Standard Paste option
@@ -81,6 +83,7 @@ class Pinput extends StatefulWidget {
     this.autofocus = false,
     this.obscureText = false,
     this.showCursor = true,
+    this.showCompleteCursor = true,
     this.isCursorAnimationEnabled = true,
     this.enableIMEPersonalizedLearning = false,
     this.enableSuggestions = true,
@@ -90,6 +93,7 @@ class Pinput extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.slideTransitionBeginOffset,
     this.cursor,
+    this.completeCursor,
     this.keyboardAppearance,
     this.inputFormatters = const [],
     this.textInputAction,
@@ -185,9 +189,11 @@ class Pinput extends StatefulWidget {
         pinAnimationType = PinAnimationType.scale,
         obscureText = false,
         showCursor = false,
+        showCompleteCursor = false,
         isCursorAnimationEnabled = false,
         slideTransitionBeginOffset = null,
         cursor = null,
+        completeCursor = null,
         obscuringCharacter = '•',
         obscuringWidget = null,
         errorText = null,
@@ -319,6 +325,10 @@ class Pinput extends StatefulWidget {
   /// Default cursor '|' or [cursor]
   final bool showCursor;
 
+  /// Whether show cursor or not
+  /// Default CompleteCursor '|' or [CompleteCursor]
+  final bool showCompleteCursor;
+
   /// Whether to enable cursor animation
   final bool isCursorAnimationEnabled;
 
@@ -331,6 +341,9 @@ class Pinput extends StatefulWidget {
 
   /// If [showCursor] true the focused field will show passed Widget
   final Widget? cursor;
+
+  /// If [showCompleteCursor] true the focused field will show Complete Widget
+  final Widget? completeCursor;
 
   /// The appearance of the keyboard.
   /// This setting is only honored on iOS devices.
@@ -564,6 +577,9 @@ class Pinput extends StatefulWidget {
       DiagnosticsProperty<Widget?>('cursor', cursor, defaultValue: null),
     );
     properties.add(
+      DiagnosticsProperty<Widget?>('completeCursor', completeCursor, defaultValue: null),
+    );
+    properties.add(
       DiagnosticsProperty<JustIndexedWidgetBuilder?>(
         'separatorBuilder',
         separatorBuilder,
@@ -663,6 +679,14 @@ class Pinput extends StatefulWidget {
         defaultValue: true,
       ),
     );
+   properties.add(
+       DiagnosticsProperty<bool>(
+         'showCompleteCursor',
+         showCompleteCursor,
+         defaultValue: true,
+       ),
+    );
+
     properties.add(
       DiagnosticsProperty<String>(
         'obscuringCharacter',

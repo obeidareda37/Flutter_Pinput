@@ -88,7 +88,6 @@ class _PinputExampleState extends State<PinputExample> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(19),
-        border: Border.all(color: borderColor),
       ),
     );
 
@@ -107,6 +106,17 @@ class _PinputExampleState extends State<PinputExample> {
               smsRetriever: smsRetriever,
               controller: pinController,
               focusNode: focusNode,
+              showCompleteCursor: true,
+              completeCursor: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 79,
+                    height: 2,
+                    color: Colors.blueGrey,
+                  ),
+                ],
+              ),
               defaultPinTheme: defaultPinTheme,
               separatorBuilder: (index) => const SizedBox(width: 8),
               validator: (value) {
@@ -133,18 +143,13 @@ class _PinputExampleState extends State<PinputExample> {
               focusedPinTheme: defaultPinTheme.copyWith(
                 decoration: defaultPinTheme.decoration!.copyWith(
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: focusedBorderColor),
                 ),
               ),
               submittedPinTheme: defaultPinTheme.copyWith(
                 decoration: defaultPinTheme.decoration!.copyWith(
                   color: fillColor,
                   borderRadius: BorderRadius.circular(19),
-                  border: Border.all(color: focusedBorderColor),
                 ),
-              ),
-              errorPinTheme: defaultPinTheme.copyBorderWith(
-                border: Border.all(color: Colors.redAccent),
               ),
             ),
           ),

@@ -57,20 +57,44 @@ class _SeparatedRaw extends StatelessWidget {
 class _PinputCursor extends StatelessWidget {
   final Widget? cursor;
   final TextStyle? textStyle;
+  final bool isCompleted;
 
-  const _PinputCursor({required this.textStyle, required this.cursor});
+  const _PinputCursor({
+    required this.textStyle,
+    this.cursor,
+    this.isCompleted = false,
+  });
 
   @override
-  Widget build(BuildContext context) => cursor ?? Text('|', style: textStyle);
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        !isCompleted
+            ? cursor ?? Text('|', style: textStyle)
+            : Positioned(
+                bottom: -5,
+                left: 0,
+                right: 0,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: cursor,
+                ),
+              ),
+      ],
+    );
+  }
 }
-
 class _PinputAnimatedCursor extends StatefulWidget {
   final Widget? cursor;
   final TextStyle? textStyle;
+  final bool isCompleted;
 
   const _PinputAnimatedCursor({
     required this.textStyle,
-    required this.cursor,
+    this.cursor,
+    this.isCompleted = false,
   });
 
   @override
@@ -84,34 +108,43 @@ class _PinputAnimatedCursorState extends State<_PinputAnimatedCursor>
   @override
   void initState() {
     super.initState();
-    _startCursorAnimation();
+    if (!widget.isCompleted) {
+      _startCursorAnimation();
+    }
   }
 
   void _startCursorAnimation() {
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 450),
-    );
-
-    _animationController.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        _animationController.repeat(reverse: true);
-      }
-    });
-    _animationController.forward();
+      lowerBound: 0.4,
+      upperBound: 1.0,
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    if (!_animationController.isDismissed) {
+      _animationController.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
+    return widget.isCompleted
+        ? _PinputCursor(
+      textStyle: widget.textStyle,
+      cursor: widget.cursor,
+      isCompleted: widget.isCompleted,
+    )
+        : FadeTransition(
       opacity: _animationController,
-      child: _PinputCursor(textStyle: widget.textStyle, cursor: widget.cursor),
+      child: _PinputCursor(
+        textStyle: widget.textStyle,
+        cursor: widget.cursor,
+        isCompleted: widget.isCompleted,
+      ),
     );
   }
 }
