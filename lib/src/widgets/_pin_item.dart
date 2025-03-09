@@ -78,11 +78,9 @@ class _PinItem extends StatelessWidget {
             style: pinTheme.textStyle,
           ),
           if (state.widget.showCompleteCursor)
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: _buildCursor(pinTheme,isCompleted: true),
-              ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _buildCursor(pinTheme,isCompleted: true),
             ),
         ],
       );

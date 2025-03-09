@@ -107,13 +107,23 @@ class _PinputExampleState extends State<PinputExample> {
               controller: pinController,
               focusNode: focusNode,
               showCompleteCursor: true,
-              completeCursor: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              cursor: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Container(
                     width: 79,
                     height: 2,
-                    color: Colors.blueGrey,
+                    color: const Color.fromARGB(255, 154, 159, 255),
+                  ),
+                ],
+              ),
+              completeCursor: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: 79,
+                    height: 2,
+                    color: const Color.fromARGB(255, 154, 159, 255),
                   ),
                 ],
               ),
@@ -129,17 +139,7 @@ class _PinputExampleState extends State<PinputExample> {
               onChanged: (value) {
                 debugPrint('onChanged: $value');
               },
-              cursor: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 9),
-                    width: 22,
-                    height: 1,
-                    color: focusedBorderColor,
-                  ),
-                ],
-              ),
+
               focusedPinTheme: defaultPinTheme.copyWith(
                 decoration: defaultPinTheme.decoration!.copyWith(
                   borderRadius: BorderRadius.circular(8),
