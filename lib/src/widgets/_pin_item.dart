@@ -72,15 +72,22 @@ class _PinItem extends StatelessWidget {
         clipBehavior: Clip.none,
         alignment: Alignment.bottomCenter,
         children: [
-          Text(
-            state.widget.obscureText ? state.widget.obscuringCharacter : pin[index],
-            key: key,
-            style: pinTheme.textStyle,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                state.widget.obscureText
+                    ? state.widget.obscuringCharacter
+                    : pin[index],
+                key: key,
+                style: pinTheme.textStyle,
+              ),
+            ],
           ),
           if (state.widget.showCompleteCursor)
             Align(
               alignment: Alignment.bottomCenter,
-              child: _buildCursor(pinTheme,isCompleted: true),
+              child: _buildCursor(pinTheme, isCompleted: true),
             ),
         ],
       );
