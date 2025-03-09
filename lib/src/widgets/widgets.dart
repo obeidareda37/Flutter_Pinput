@@ -67,23 +67,7 @@ class _PinputCursor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        !isCompleted
-            ? cursor ?? Text('|', style: textStyle)
-            : Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: cursor,
-                ),
-              ),
-      ],
-    );
+    return cursor ?? Text('|', style: textStyle);
   }
 }
 class _PinputAnimatedCursor extends StatefulWidget {
@@ -103,7 +87,7 @@ class _PinputAnimatedCursor extends StatefulWidget {
 
 class _PinputAnimatedCursorState extends State<_PinputAnimatedCursor>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController;
+  AnimationController? _animationController;
 
   @override
   void initState() {
@@ -124,9 +108,7 @@ class _PinputAnimatedCursorState extends State<_PinputAnimatedCursor>
 
   @override
   void dispose() {
-    if (!_animationController.isDismissed) {
-      _animationController.dispose();
-    }
+    _animationController?.dispose();
     super.dispose();
   }
 
@@ -139,7 +121,7 @@ class _PinputAnimatedCursorState extends State<_PinputAnimatedCursor>
       isCompleted: widget.isCompleted,
     )
         : FadeTransition(
-      opacity: _animationController,
+      opacity: _animationController!,
       child: _PinputCursor(
         textStyle: widget.textStyle,
         cursor: widget.cursor,
@@ -148,3 +130,4 @@ class _PinputAnimatedCursorState extends State<_PinputAnimatedCursor>
     );
   }
 }
+
